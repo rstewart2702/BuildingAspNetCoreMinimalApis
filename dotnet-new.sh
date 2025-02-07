@@ -3,6 +3,4 @@
 dotnet new webapi \
   -n ${1} \
   --auth None \
-  --no-https \
-  --no-openapi \
-  --use-program-main
+  --no-openapi
