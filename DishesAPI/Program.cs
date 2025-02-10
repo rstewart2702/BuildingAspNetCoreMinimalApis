@@ -34,9 +34,9 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/dishes", (DishesDbContext context) =>
+app.MapGet("/dishes", async (DishesDbContext context) =>
 {
-    return context.Dishes;
+    return await context.Dishes.ToListAsync();
 });
 
 
