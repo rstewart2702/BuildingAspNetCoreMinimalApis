@@ -24,9 +24,8 @@
    (This was the code which creates a "scope" and then a 
    "context-within-that-scope" in order to send EnsureDeleted()
    and then Migrate() to the scope's ".Database"...)
-
-   This code came immediately before the Run() message is sent
-   to the app...
+   ALSO:  This code came immediately before the send of Run() message 
+   to "app"...
 
 
 # I think it was set up by simply using aptitude to install 
