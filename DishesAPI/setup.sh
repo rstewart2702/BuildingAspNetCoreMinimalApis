@@ -143,3 +143,10 @@ dotnet tool install --global ilspycmd
 # a more verbosely-defined Program-class file that is generated automatically
 # by more compiler boilerplating/templating stuff for dotnet minimal api's etc...
 
+
+# ************************************************************
+# branch:  core-concepts
+# altered some basics, and also figured out how to run 
+# the https-enabled version from the command line:
+dotnet run --launch-profile https
+
