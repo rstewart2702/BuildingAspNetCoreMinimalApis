@@ -2,19 +2,29 @@
 using Microsoft.Extensions.Hosting;
 using DishesAPI.Entities;
 using System.IO;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 namespace DishesAPI.DbContexts;
 
-public class DishesDbContext : DbContext
+// public class DishesDbContext(DbContextOptions<DishesDbContext> options) : DbContext(options)
+public class DishesDbContext : DbContext 
 {
     public DbSet<Dish> Dishes { get; set; } = null!;
     public DbSet<Ingredient> Ingredients { get; set; } = null!;
 
+    // public DishesDbContext(DbContextOptions<DishesDbContext> options) : base(options) {
+    // }
 
-    public DishesDbContext(DbContextOptions<DishesDbContext> options)
-        : base(options)
-    {
-    }
+    protected override void OnConfiguring(
+            DbContextOptionsBuilder optionsBuilder
+        )
+        {
+            optionsBuilder.UseSqlite(); //(/*"Data Source=Dishes.db"*/);
+        }
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     base.OnConfiguring(optionsBuilder);
+    // }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
