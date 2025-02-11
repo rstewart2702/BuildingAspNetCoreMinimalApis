@@ -43,7 +43,7 @@ app.MapGet("/dishes", async (DishesDbContext context) =>
 
 // Included are routes for which "arguments" or parameters are specified:
 app.MapGet(
-    "/dishes/{dishId}", 
+    "/dishes/{dishId:guid}", 
     async (
         DishesDbContext dishesDbContext,
         Guid dishId
@@ -74,6 +74,21 @@ app.MapGet(
     }
 );
 
+
+app.MapGet(
+    "/dishes/{dishName:alpha}",
+    async (DishesDbContext dishesContext, string dishName) => 
+    {
+        return (
+            await
+            dishesContext.Dishes
+            // .Include(d => d.Name)
+            .FirstOrDefaultAsync(
+                d => d.Name == dishName
+            )
+        ); // ?.Name;
+    }
+);
 
 // Added by the instructor at almost the end of the "Demo:  Adding the Data Layer" 
 // lesson:
