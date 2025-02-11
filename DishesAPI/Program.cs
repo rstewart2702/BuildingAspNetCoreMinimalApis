@@ -1,6 +1,8 @@
+using AutoMapper;
 using DishesAPI.DbContexts;
 using DishesAPI.Entities;
 using Microsoft.EntityFrameworkCore;
+using MinimalAPIDemo.Models;
 
 // THIS SOURCE FILE MUST RESULT IN A TOP-LEVEL, "MAIN" CLASS
 // WHICH CONFORMS TO SOME PRE-DETERMINED EXPECTATION,
@@ -23,6 +25,16 @@ builder.Services.AddDbContext<DishesDbContext>(
     o => o.UseSqlite(builder.Configuration["ConnectionStrings:DishesDBConnectionString"])
 );
 
+// This corresponds to the addition of the AutoMapper packages to 
+// our project.  
+// The 
+//   AppDomain.CurrentDomain.GetAssemblies()
+// expression retrieves all of the "currently loaded assemblies," so that 
+// the profiles-of-mapping-configurations (for mappings from Entity-classes
+// to DTO-classes, and back again) can be found by the "AutoMapper library/system."
+//
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,24 +48,34 @@ var summaries = new[]
 
 // ROUTES:
 // There are several kinds of routes the instructor started to discuss.
-app.MapGet("/dishes", async (DishesDbContext context) =>
+app.MapGet("/dishes", async (DishesDbContext context, IMapper mapper) =>
 {
-    return await context.Dishes.ToListAsync();
-});
+    return mapper.Map<IEnumerable<DishDto>>(await context.Dishes.ToListAsync());
+})  ;
 
 // Included are routes for which "arguments" or parameters are specified:
+//   N.B. Now, we've injected an IMapper instance 
+//   and we use it to map from a Dish instance to a DishDto instance
+//   according to what's retrieved from the database and transformed
+//   into an instance of Dish.
 app.MapGet(
-    "/dishes/{dishId:guid}", 
+    "/dishes/{dishId:guid}",
     async (
         DishesDbContext dishesDbContext,
+        IMapper mapper,
         Guid dishId
-    ) => {
-        return await
-        dishesDbContext.
-        Dishes.
-        FirstOrDefaultAsync(
-            d => d.Id == dishId
-        );
+    ) =>
+    {
+        return
+        mapper.Map<DishDto>(
+            await
+            dishesDbContext.
+            Dishes.
+            FirstOrDefaultAsync(
+                d => d.Id == dishId
+            )
+        )
+        ;
     }
 );
 
@@ -61,32 +83,36 @@ app.MapGet(
 // in that the JSON libraries detected an object-graph cycle?
 app.MapGet(
     "/dishes/{dishId}/ingredients",
-    async (DishesDbContext dishesDbContext, Guid dishId) =>
+    async (DishesDbContext dishesDbContext, IMapper mapper, Guid dishId) =>
     {
-        return (
-            await
-            dishesDbContext.Dishes
-            .Include(d => d.Ingredients)
-            .FirstOrDefaultAsync(
-                d => d.Id == dishId
-            )
-            )?.Ingredients;
+        return mapper.Map<IEnumerable<IngredientDto>>(
+            (
+                await 
+                dishesDbContext.Dishes
+                .Include(d => d.Ingredients)
+                .FirstOrDefaultAsync(
+                    d => d.Id == dishId
+                )
+            )?.Ingredients
+        );
     }
 );
 
 
 app.MapGet(
     "/dishes/{dishName:alpha}",
-    async (DishesDbContext dishesContext, string dishName) => 
+    async (DishesDbContext dishesContext, IMapper mapper, string dishName) =>
     {
         return (
-            await
-            dishesContext.Dishes
-            // .Include(d => d.Name)
-            .FirstOrDefaultAsync(
-                d => d.Name == dishName
-            )
-        ); // ?.Name;
+            mapper.Map<DishDto>(
+                await
+                dishesContext.Dishes
+                // .Include(d => d.Name)
+                .FirstOrDefaultAsync(
+                    d => d.Name == dishName
+                )
+            ) // ?.Name;
+        );
     }
 );
 
