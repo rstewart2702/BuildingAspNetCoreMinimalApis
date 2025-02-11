@@ -34,10 +34,45 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
+// ROUTES:
+// There are several kinds of routes the instructor started to discuss.
 app.MapGet("/dishes", async (DishesDbContext context) =>
 {
     return await context.Dishes.ToListAsync();
 });
+
+// Included are routes for which "arguments" or parameters are specified:
+app.MapGet(
+    "/dishes/{dishId}", 
+    async (
+        DishesDbContext dishesDbContext,
+        Guid dishId
+    ) => {
+        return await
+        dishesDbContext.
+        Dishes.
+        FirstOrDefaultAsync(
+            d => d.Id == dishId
+        );
+    }
+);
+
+// In the initial exercise, this exposed an issue with the data model,
+// in that the JSON libraries detected an object-graph cycle?
+app.MapGet(
+    "/dishes/{dishId}/ingredients",
+    async (DishesDbContext dishesDbContext, Guid dishId) =>
+    {
+        return (
+            await
+            dishesDbContext.Dishes
+            .Include(d => d.Ingredients)
+            .FirstOrDefaultAsync(
+                d => d.Id == dishId
+            )
+            )?.Ingredients;
+    }
+);
 
 
 // Added by the instructor at almost the end of the "Demo:  Adding the Data Layer" 
