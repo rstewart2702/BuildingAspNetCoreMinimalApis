@@ -150,3 +150,57 @@ dotnet tool install --global ilspycmd
 # the https-enabled version from the command line:
 dotnet run --launch-profile https
 
+# The following runs the application without executing the 
+# build process first, but during development, it's 
+# simpler to do the rebuild because the application code
+# gets changed and then the application server is re-launched:
+dotnet run --launch-profile https --no-build
+
+# [2025-02-11 Tue 13:58]
+# A new, significant development:  the use of the AutoMapper
+# "tool":
+dotnet add . package 'AutoMapper'
+
+# Here's an example run:
+$ dotnet add . package 'AutoMapper'
+  Determining projects to restore...
+  Writing /tmp/tmpxGEHU2.tmp
+info : X.509 certificate chain validation will use the fallback certificate bundle at '/usr/share/dotnet/sdk/8.0.403/trustedroots/codesignctl.pem'.
+info : X.509 certificate chain validation will use the fallback certificate bundle at '/usr/share/dotnet/sdk/8.0.403/trustedroots/timestampctl.pem'.
+info : Adding PackageReference for package 'AutoMapper' into project '/home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/DishesAPI.csproj'.
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/automapper/index.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/automapper/index.json 90ms
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/1.1.0.118/3.1.0-ci1033.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/1.1.0.118/3.1.0-ci1033.json 85ms
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/3.1.0-ci1034/3.3.0-ci1002.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/3.1.0-ci1034/3.3.0-ci1002.json 81ms
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/3.3.0-ci1003/4.2.1.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/3.3.0-ci1003/4.2.1.json 94ms
+info :   GET https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/5.0.0-beta-1/13.0.1.json
+info :   OK https://api.nuget.org/v3/registration5-gz-semver2/automapper/page/5.0.0-beta-1/13.0.1.json 105ms
+info : Restoring packages for /home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/DishesAPI.csproj...
+info :   GET https://api.nuget.org/v3/vulnerabilities/index.json
+info :   OK https://api.nuget.org/v3/vulnerabilities/index.json 168ms
+info :   GET https://api.nuget.org/v3-vulnerabilities/2025.02.11.04.21.55/vulnerability.base.json
+info :   GET https://api.nuget.org/v3-vulnerabilities/2025.02.11.04.21.55/2025.02.11.10.21.56/vulnerability.update.json
+info :   OK https://api.nuget.org/v3-vulnerabilities/2025.02.11.04.21.55/vulnerability.base.json 79ms
+info :   OK https://api.nuget.org/v3-vulnerabilities/2025.02.11.04.21.55/2025.02.11.10.21.56/vulnerability.update.json 114ms
+info : Package 'AutoMapper' is compatible with all the specified frameworks in project '/home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/DishesAPI.csproj'.
+info : PackageReference for package 'AutoMapper' version '13.0.1' added to file '/home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/DishesAPI.csproj'.
+info : Writing assets file to disk. Path: /home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/obj/project.assets.json
+log  : Restored /home/rstewar/node-work/dotnet-related/BuildingAspNetCoreMinimalApis/DishesAPI/DishesAPI.csproj (in 390 ms).
+
+# So, here's the list of installed packages now:
+$ dotnet list . package
+Project 'DishesAPI' has the following package references
+   [net8.0]:
+   Top-level Package                           Requested   Resolved
+   > AutoMapper                                13.0.1      13.0.1
+   > Microsoft.EntityFrameworkCore.Design      9.0.1       9.0.1
+   > Microsoft.EntityFrameworkCore.Sqlite      9.0.1       9.0.1
+   > Microsoft.EntityFrameworkCore.Tasks       9.0.1       9.0.1
+   > Microsoft.EntityFrameworkCore.Tools       9.0.1       9.0.1
+
+# ##########################################################
+
+
