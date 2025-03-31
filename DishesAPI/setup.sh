@@ -204,3 +204,48 @@ Project 'DishesAPI' has the following package references
 # ##########################################################
 
 
+# 2025-03-12 Wed 08:58
+# Big SSL-certificate-related issues with Postman:
+# I thought I had things set up correctly but then again, maybe I didn't
+# however, I may try the 
+dotnet run --launch-profile https
+# command again from the command line...
+# AND:
+# THAT RIGHT THERE, LADIES AND GENTLEMEN,
+# is what you must do to launch this thing, at present, so that
+# postman will interact with our nascent application, using https,
+# without complaining about certification-related errors...
+
+# In fact, in its current state, the "profile" named "https"
+# launches the application to listen on an https port,
+# and also an http port, so that you may use either.
+
+# It seems that if you just launch it, from VScode, in its present
+# form, it will not even try to launch an https server?  It's not 
+# clear to me how to override this by pointing-and-clicking inside
+# of VScode...
+#
+# I don't even know where to start looking for information
+# about how to get vscode to start my application running
+# by the pointy-clicky route in vscode.
+#
+# It appears to be related to "configurations" stored
+# inside a
+#   .vscode/launch.json
+# file:  there's a "configurations" structure member
+# which is an array of java-/ecma- script objects which
+# specify all kinds of run-time configuration information?
+# Again, where's the instruction manual for all this stuff?
+#
+# If you click on the "debug" button on the far-left edge
+# of vscode window (that's the little "play-arrow" icon with
+# a graphic of a "bug" or beetle on the lower-left of the icon)
+# then a debugger-explorer view replaces the left-hand-pane's
+# project-explorer, and there's a option at the top to
+# change which configuration is used for debugging.
+#
+# What ain't clear (to me) is how that is associated with the
+# stuff that is set up in the
+#   Properties/launchsettings.json
+# file of the project, which contains "profiles" which govern
+# various application startup options, it seems...
