@@ -1,6 +1,7 @@
 using AutoMapper;
 using DishesAPI.DbContexts;
 using DishesAPI.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MinimalAPIDemo.Models;
 
@@ -48,10 +49,20 @@ var summaries = new[]
 
 // ROUTES:
 // There are several kinds of routes the instructor started to discuss.
-app.MapGet("/dishes", async (DishesDbContext context, IMapper mapper) =>
-{
-    return mapper.Map<IEnumerable<DishDto>>(await context.Dishes.ToListAsync());
-})  ;
+app.MapGet(
+    "/dishes", 
+    async (
+        DishesDbContext context, 
+        IMapper mapper,
+        [FromQuery] string? name // his stupid program example didn't let me  
+    ) =>
+    {
+        return mapper.Map<IEnumerable<DishDto>>(
+            await context.Dishes
+            .Where(d => name == null || d.Name.Contains(name))
+            .ToListAsync()
+            );
+    })  ;
 
 // Included are routes for which "arguments" or parameters are specified:
 //   N.B. Now, we've injected an IMapper instance 
